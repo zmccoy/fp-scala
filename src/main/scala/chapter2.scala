@@ -14,7 +14,7 @@ object ChapterTwo {
   //Exercise 2
   def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
     @annotation.tailrec
-    def loop(n: Int, prev: A) = {
+    def loop(n: Int, prev: A): Boolean = {
       if(n == as.length) true
       else if(gt(as(n), prev)) loop(n + 1, as(n))
       else false
@@ -24,6 +24,16 @@ object ChapterTwo {
   }
 
   //Exercise 3
+  def curry[A,B,C](f: (A, B) => C): A => (B => C) =
+    a => b => f(a,b)
+
+  //Exercise 4
+  def uncurry[A,B,C](f: A => B => C): (A, B) => C =
+    (a,b) => f(a)(b)
+
+  //Exercise 5
+  def compose[A,B,C](f: B => C, g: A => B): A => C =
+    a => f(g(a))
 
 
 
