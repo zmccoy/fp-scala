@@ -211,9 +211,31 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
   //Exercise 24
+  def hasPrefix[A](l: List[A], prefix: List[A]): Boolean = (l, prefix) match {
+    case (_, Nil) => true
+    case (Cons(h,t), Cons(h1,t1)) => if(h == h1) hasPrefix(t,t1)
+    case _ => false
+  }
+
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = l match {
+    case Nil => false
+    case Cons(h,t) if hasPrefix(l, sub) => true
+    case Cons(h,t) => hasSubsequence(t, sub)
+  }
 
 
 
+  sealed trait Tree[+A]
+  case class Leaf[A](value: A) extends Tree[A]
+  case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+  //Exercise 25
+  def size[A](t: Tree[A]): Int = t match {
+    case Leaf(_) => 1
+    case Branch(l,r) => 1 + size(l) + size(r)
+  }
+
+  //Exercise 26
 
 }
 
