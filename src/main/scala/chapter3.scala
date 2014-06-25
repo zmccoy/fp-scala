@@ -169,6 +169,48 @@ object List { // `List` companion object. Contains functions for creating and wo
   def concat[A](l: List[List[A]]): List[A] = foldRight(l, Nil:List[A])(append)
 
   //Exercise 16
+  def add1(l: List[Int]): List[Int] =
+    foldRight(l, Nil:List[Int])((h,t) => Cons(h+1,t))
+
+  //Exercise 17
+  def doubleToString(l: List[Double]): List[String] =
+    foldRight(l, Nil:List[String])((h,t) => Cons(h.toString, t))
+
+  //Exercise 18
+  def map[A,B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil:List[B])((h,t) => Cons(f(h), t))
+
+  //Exercise 19
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil:List[A])((h,t) => if(f(h)) => Cons(h,t) else t)
+
+  //Exercise 20
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] =
+    concat(map(l)(f))
+
+  def flatMap2[A,B](l: List[A])(f: A => List[B]): List[B] = 
+    foldRight(l, Nil:List[B])((h,t) => Cons(concat(f(h)), t))
+
+  //Exercise 21
+  def filterViaFlatMap[A,B](l: List[A])(f: A => Boolean): List[A] = {
+    flatMap(l)(if(f(a)) List(a) else Nil)
+  }
+
+  //Exercise 22
+  def addTwoLists(l: List[Int], z: List[Int]): List[Int] = (l,z) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h,t), Cons(h1,t1)) => Cons(h+h1, addTwoLists(t,t1))
+  }
+
+  //Exercise 23
+  def doTwoLists[A,B,C](l: List[A], z: List[B])(f: (A,B) => C): List[C] = (l,z) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h,t), Cons(h1,t1)) => Cons(f(h,h1), doTwoLists(t,t1)(f))
+  }
+
+  //Exercise 24
 
 
 
