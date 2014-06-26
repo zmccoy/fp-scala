@@ -236,6 +236,42 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
   //Exercise 26
+  def maximum[Int](t: Tree[Int]): Int = t match {
+    case Leaf(n) => n
+    case Branch(l,r) => maximum(l) max maximum(r) 
+  }
+
+  //Exercise 27
+  def depth[A](t: Tree[A]): Int = t match {
+    case Leaf(_) => 0
+    case Branch(l,r) => 1 + (depth(l) max depth(r))
+  }
+
+  //Exercise 28
+  def mapTree[A,B](t: Tree[A])(f: A => B):Tree[B] = t match {
+    case Leaf(x) => Leaf(f(x))
+    case Branch(l,r) => Branch(mapTree(l)(f), mapTree(r)(f)) 
+  }
+
+  //Exercise 29
+  def fold[A,B](t: Tree[A])(f: A => B)(b: (B,B) => B) = t match {
+    case Leaf(a) => f(a)
+    case Branch(l,r) => b(fold(l)(f)(b), fold(l)(f)(b))
+  }
+
+  def sizeViaFold[A](t: Tree[A]): Int =
+    fold(t)(a => 1)(1 + _ + _)
+
+  def maxViaFold(t: Tree[Int]): Int =
+    fold(t)(a => a)(_ max _)
+
+  def depthViaFold[A](t: Tree[A]): Int =
+    fold(t)(a => 0)((a,b) => 1 + (a max b))
+
+  def mapViaFold[A,B](t: Tree[A])(f: A => B): Tree[B] =
+    fold(t)(a => Leaf(f(a)): Tree[B])(Branch(_,_))
+
+
 
 }
 
