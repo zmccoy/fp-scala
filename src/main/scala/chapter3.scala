@@ -162,7 +162,7 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(l, (b:B) => b)((a,gAcc) => b => gAcc(f(b,a)))(z)
 
   //Exercise 14
-  def append[A](l: List[A], x: List[A]): List[A] =
+  def append2[A](l: List[A], x: List[A]): List[A] =
     foldRight(l, x)(Cons(_,_))
 
   //Exercise 15
@@ -182,18 +182,19 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   //Exercise 19
   def filter[A](l: List[A])(f: A => Boolean): List[A] =
-    foldRight(l, Nil:List[A])((h,t) => if(f(h)) => Cons(h,t) else t)
+    foldRight(l, Nil:List[A])((h,t) => if(f(h)) Cons(h,t) else t)
 
   //Exercise 20
   def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] =
     concat(map(l)(f))
 
-  def flatMap2[A,B](l: List[A])(f: A => List[B]): List[B] = 
-    foldRight(l, Nil:List[B])((h,t) => Cons(concat(f(h)), t))
+//Also usable
+//  def flatMap2[A,B](l: List[A])(f: A => List[B]): List[B] = 
+//    foldRight(l, Nil:List[B])((h,t) => Cons(concat(f(h)):B, t)) Wrong
 
   //Exercise 21
   def filterViaFlatMap[A,B](l: List[A])(f: A => Boolean): List[A] = {
-    flatMap(l)(if(f(a)) List(a) else Nil)
+    flatMap(l)(a => if(f(a)) List(a) else Nil)
   }
 
   //Exercise 22
@@ -213,7 +214,7 @@ object List { // `List` companion object. Contains functions for creating and wo
   //Exercise 24
   def hasPrefix[A](l: List[A], prefix: List[A]): Boolean = (l, prefix) match {
     case (_, Nil) => true
-    case (Cons(h,t), Cons(h1,t1)) => if(h == h1) hasPrefix(t,t1)
+    case (Cons(h,t), Cons(h1,t1)) if(h == h1) => hasPrefix(t,t1)
     case _ => false
   }
 
@@ -236,7 +237,7 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
   //Exercise 26
-  def maximum[Int](t: Tree[Int]): Int = t match {
+  def maximum(t: Tree[Int]): Int = t match {
     case Leaf(n) => n
     case Branch(l,r) => maximum(l) max maximum(r) 
   }
@@ -254,7 +255,7 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
   //Exercise 29
-  def fold[A,B](t: Tree[A])(f: A => B)(b: (B,B) => B) = t match {
+  def fold[A,B](t: Tree[A])(f: A => B)(b: (B,B) => B): B = t match {
     case Leaf(a) => f(a)
     case Branch(l,r) => b(fold(l)(f)(b), fold(l)(f)(b))
   }
