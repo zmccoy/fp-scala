@@ -13,7 +13,7 @@ object ChapterTwo {
 
   //Exercise 2
   def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
-    @annotation.tailrec
+     @annotation.tailrec
     def loop(n: Int, prev: A): Boolean = {
       if(n == as.length) true
       else if(gt(as(n), prev)) loop(n + 1, as(n))
