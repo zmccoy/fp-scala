@@ -1,3 +1,5 @@
+
+
 sealed trait Option[+A] {
 
   //Exercise 1

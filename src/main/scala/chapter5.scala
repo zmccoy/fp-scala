@@ -110,7 +110,7 @@ object chapter5 {
       filter(p).headOption
 
     //Exercise 13
-    def mapViaUnfold(f: A => B) =
+    def mapViaUnfold[B](f: A => B) =
       unfold(this) {
         case Cons(h,t) => Some((f(h()), t()))
         case _ => None
@@ -121,7 +121,7 @@ object chapter5 {
         case (Cons(h,t), n) if n > 0 => Some((h(), (t(), n-1)))
         case _ => None
       }
-    
+
     def takeWhileViaUnfold(f: A => Boolean): Stream[A] =
       unfold(this) {
         case Cons(h,t) if f(h()) => Some((h(), t()))
@@ -136,9 +136,9 @@ object chapter5 {
 
     def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] =
       zipWithAll(s2)((_,_))
-    
+
     /*
-     There are a number of edge cases with this function. We can deal with some of these edge cases by treating each stream as an infinite series of `Option` values, which become `None` when the stream is exhausted. 
+     There are a number of edge cases with this function. We can deal with some of these edge cases by treating each stream as an infinite series of `Option` values, which become `None` when the stream is exhausted.
      */
     def zipWithAll[B,C](s2: Stream[B])(f: (Option[A],Option[B]) => C): Stream[C] = {
       val a = this map (Some(_)) append (constant(None))
@@ -153,6 +153,28 @@ object chapter5 {
     }
 
     //Exercise 14
+
+//    def startsWith(s: Stream[A]): Boolean =
+//      zipAll(s).takeWhile(x => !x._2.isEmpty) forAll {
+//        case (h,h2) => h == h2
+  //    }
+
+    //Exercise 15
+    def tails: Stream[Stream[A]] =
+      unfold(this) {
+        case Empty => None
+        case s => Some((s, s drop 1))
+      } append (Stream(empty))
+
+//    def hasSubsequence(s: Stream[A]): Boolean =
+//      tails exists (_ startsWith s)
+
+    //Exercise 16
+    def scanRight[B](z: B)(f: (A,=>B) => B): Stream[B] =
+      foldRight((z, Stream(z)))((a,p) => {
+                                  val b2 = f(a,p._1)
+                                  (b2, cons(b2,p._2))
+                                })._2
 
 
   }
@@ -186,7 +208,7 @@ object chapter5 {
     }
 
     //Exercise 9
-    def from(n: Int): Stream[Int] = 
+    def from(n: Int): Stream[Int] =
       cons(n, from(n+1))
 
     //Exercise 10
